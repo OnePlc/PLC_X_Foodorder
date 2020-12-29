@@ -1,0 +1,35 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 13.12.2020
+ * Time: 19:36
+ */
+''?>
+
+<div class="row w-100 py-4" style="background:url(/foodorder/img/landingpage.jpg) no-repeat; background-size:cover; height:250px;">
+</div>
+
+<?=$this->partial('shop/partials/category_filter', [])?>
+
+<div class="row">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <?=$this->partial('shop/partials/food_list', ['aMeals' => $aMeals])?>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Warenkorb</h2>
+                    </div>
+                    <div class="ajax-cart">
+                        <div class="card-body  m-0 p-0 border-0">
+                            Wird geladen...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

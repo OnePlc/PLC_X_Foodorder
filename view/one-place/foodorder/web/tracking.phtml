@@ -1,0 +1,41 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 13.12.2020
+ * Time: 21:40
+ */
+
+use Application\Controller\CoreController;
+
+/*
+$this->InlineScript()
+    ->appendFile($this->basePath() . '/foodorder/js/tracking.js'); */
+?>
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-success p-4">
+                Vielen Dank für deine Bestellung. Du kannst den Status deiner Bestellung hier verfolgen
+            </div>
+        </div>
+    </div>
+    <div class="row py-4">
+        <div class="col-md-12">
+            <div id="mapid"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #mapid { height: 480px; }
+
+    .leaflet-routing-container {
+        display: none;
+    }
+</style>
+
+<script>
+    window.order_location = '<?=CoreController::$oSession->oLocation->street?> <?=CoreController::$oSession->oLocation->street_nr?>,<?=CoreController::$oSession->oLocation->zip?> <?=CoreController::$oSession->oLocation->city?>';
+</script>

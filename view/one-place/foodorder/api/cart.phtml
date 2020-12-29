@@ -1,0 +1,87 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 13.12.2020
+ * Time: 20:56
+ */
+?>
+<div class="card-body  m-0 p-0 border-0">
+
+    <?php
+    if(count($aItems) > 0) { ?>
+        <ul class="list-group m-0 p-0">
+    <?php
+        $fTotal = 0;
+        foreach($aItems as $oItem) {
+            $fPosTotal = ($oItem->amount*$oItem->price);
+            $fTotal+=$fPosTotal;
+            ?>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-md-2">
+                    <?=$oItem->amount?>
+                </div>
+                <div class="col-md-6">
+                    <?=$oItem->label?>
+                </div>
+                <div class="col-md-4 text-right">
+                    CHF <?=number_format($fPosTotal,2)?>
+                </div>
+            </div>
+        </li>
+    <?php
+        }
+        ?>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-8">
+                        Subtotal
+                    </div>
+                    <div class="col-md-4 text-right">
+                        CHF <?=number_format($fTotal,2)?>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-8">
+                        Lieferkosten
+                    </div>
+                    <div class="col-md-4 text-right">
+                        kostenlos
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-8">
+                        <b>Total</b>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <b>CHF <?=number_format($fTotal,2)?></b>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    <?php
+    } else {
+        ?>
+        <i class="fas fa-shopping-basket fa-2x w-100 text-center"></i>
+        <i class="w-100 text-center">Dein Warenkorb ist noch leer</i>
+        <?php
+    }
+    ?>
+</div>
+<?php
+if(count($aItems) > 0) { ?>
+<div class="card-footer">
+    <?php if($fTotal >= $fMin) { ?>
+    <a class="btn btn-primary" hreF="/kasse">Zur Kasse</a>
+    <?php } else { ?>
+    <div class="alert alert-warning p-4">
+        Sie haben den Mindestbestellwert von CHF <?=number_format($fMin,2)?> noch nicht erreicht. Sie benötigen noch CHF <?=number_format($fMin-$fTotal,2)?> um die Bestellung abschliessen zu können
+    </div>
+    <?php } ?>
+</div>
+<?php } ?>

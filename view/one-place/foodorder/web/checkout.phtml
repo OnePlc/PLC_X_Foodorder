@@ -1,0 +1,176 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 13.12.2020
+ * Time: 21:30
+ */
+
+use Application\Controller\CoreController;
+
+?>
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="card-title">Kasse</h1>
+                    </div>
+                    <div class="card-header">
+                        <h3 class="card-title">Deine Bestellung</h3>
+                    </div>
+                    <div class="card-body m-0 p-0">
+                        <?php
+                        if(count($aItems) > 0) { ?>
+                            <ul class="list-group m-0 p-0">
+                                <?php
+                                $fTotal = 0;
+                                foreach($aItems as $oItem) {
+                                    $fPosTotal = ($oItem->amount*$oItem->price);
+                                    $fTotal+=$fPosTotal;
+                                    ?>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <?=$oItem->amount?>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <?=$oItem->label?>
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                CHF <?=number_format($fPosTotal,2)?>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <?php
+                                }
+                                ?>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            Subtotal
+                                        </div>
+                                        <div class="col-md-4 text-right">
+                                            CHF <?=number_format($fTotal,2)?>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            Lieferkosten
+                                        </div>
+                                        <div class="col-md-4 text-right">
+                                            kostenlos
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <b>Total</b>
+                                        </div>
+                                        <div class="col-md-4 text-right">
+                                            <b>CHF <?=number_format($fTotal,2)?></b>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <?php
+                        } else {
+                            ?>
+                            <i class="fas fa-shopping-basket fa-2x w-100 text-center"></i>
+                            <i class="w-100 text-center">Dein Warenkorb ist noch leer</i>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <div class="card-header">
+                        <h3 class="card-title">Adresse & Persönliche Daten</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                Du hast schon einmal bestellt?
+                                <form action="/food-order/api/login">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>E-Mail</label>
+                                            <input type="text" name="order_login_mail" class="form-control" />
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>Passwort</label>
+                                            <input type="password" size="4" name="order_login_pass" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input type="submit" class="btn btn-primary" value="Anmelden" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-9">
+                                <form action="" method="POST">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label>Vorname</label>
+                                        <input type="text" name="order_contact_firstname" class="form-control" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Name</label>
+                                        <input type="text" size="4" name="order_contact_lastname" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label>Strasse</label>
+                                        <input type="text" name="order_address_street" class="form-control" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Hausnr</label>
+                                        <input type="text" size="4" name="order_address_streetnr" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label>PLZ</label>
+                                        <input type="text" size="4" name="order_address_zip" class="form-control" value="<?=CoreController::$oSession->oLocation->zip?>" readonly/>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label>Ort</label>
+                                        <input type="text" name="order_address_city" class="form-control" value="<?=CoreController::$oSession->oLocation->city?>" readonly/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="checkbox"> Ich möchte meine Daten für zukünftige Bestellungen speichern (Konto erstellen)
+                                    </div>
+                                </div>
+                                <div class="row d-none">
+                                    <div class="col-md-8">
+                                        <label>E-Mail</label>
+                                        <input type="email" name="order_newuser_mail" class="form-control" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Passwort</label>
+                                        <input type="password" name="order_newuser_pass" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header">
+                        <h3 class="card-title">Zahlung</h3>
+                    </div>
+                    <div class="card-body">
+
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" class="btn btn-primary" value="Bestellen" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

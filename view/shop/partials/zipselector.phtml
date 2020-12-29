@@ -1,0 +1,33 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 13.12.2020
+ * Time: 19:14
+ */
+
+$this->InlineScript()
+    ->appendFile($this->basePath() . '/foodorder/js/zipselect.js');
+
+?>
+
+<div class="row w-100 py-4" style="background:url(/foodorder/img/landingpage.jpg) no-repeat; background-size:cover; height:450px;">
+    <div class="col-md-3"></div>
+    <div class="col-md-6" style="padding-top:10%;">
+        <select id="searchLocation" style="width:100%; padding:20px;"></select>
+    </div>
+</div>
+
+<style>
+    .select2-selection {
+        min-height: 64px;
+    }
+
+    .select2-selection__rendered {
+        margin: 16px;
+    }
+
+    .select2-selection__arrow {
+        margin: 16px;
+    }
+</style>

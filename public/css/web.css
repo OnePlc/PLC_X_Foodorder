@@ -1,0 +1,12 @@
+body {
+    padding-top:104px;
+}
+
+.food-price {
+    font-size:20px;
+    font-weight: 600;
+}
+
+.food-list-item:hover {
+    border:1px solid blue;
+}

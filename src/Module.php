@@ -69,10 +69,28 @@ class Module
             'factories' => [
                 Controller\WebController::class => function ($container) {
                     $oDbAdapter = $container->get(AdapterInterface::class);
-                    return new Controller\UserController(
+                    $aPluginTbls = [];
+                    $aPluginTbls['job'] = $container->get(\OnePlace\Job\Model\JobTable::class);
+                    $aPluginTbls['job-position'] = $container->get(\OnePlace\Job\Position\Model\PositionTable::class);
+                    $aPluginTbls['contact'] = $container->get(\OnePlace\Contact\Model\ContactTable::class);
+                    $aPluginTbls['contact-address'] = $container->get(\OnePlace\Contact\Address\Model\AddressTable::class);
+
+                    return new Controller\WebController(
                         $oDbAdapter,
                         $container->get(\OnePlace\Article\Model\ArticleTable::class),
-                        $container
+                        $container,
+                        $aPluginTbls
+                    );
+                },
+                Controller\ApiController::class => function ($container) {
+                    $oDbAdapter = $container->get(AdapterInterface::class);
+                    $aPluginTbls = [];
+                    $aPluginTbls['zip'] = new TableGateway('contact_address_zipcity', $oDbAdapter);
+                    return new Controller\ApiController(
+                        $oDbAdapter,
+                        $container->get(\OnePlace\Article\Model\ArticleTable::class),
+                        $container,
+                        $aPluginTbls
                     );
                 },
             ],

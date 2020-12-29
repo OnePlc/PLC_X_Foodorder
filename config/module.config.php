@@ -32,6 +32,73 @@ return [
                     ],
                 ],
             ],
+            # Module Basic Route
+            'food-tracking' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/food-tracking/[:id]',
+                    'constraints' => [
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WebController::class,
+                        'action'     => 'tracking',
+                    ],
+                ],
+            ],
+            'checkout' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/kasse',
+                    'defaults' => [
+                        'controller' => Controller\WebController::class,
+                        'action'     => 'checkout',
+                    ],
+                ],
+            ],
+            # Module Basic Route
+            'food-zip' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/somerandom-seo-[:zip]',
+                    'constraints' => [
+                        'zip'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WebController::class,
+                        'action'     => 'list',
+                    ],
+                ],
+            ],
+            # Module Basic Route
+            'food-single' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/random-singleseo-[:contact]-[:zip]',
+                    'constraints' => [
+                        'contact'     => '[0-9]+',
+                        'zip'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WebController::class,
+                        'action'     => 'view',
+                    ],
+                ],
+            ],
+            'foodorder-api' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/foodorder/api[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\ApiController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
 
