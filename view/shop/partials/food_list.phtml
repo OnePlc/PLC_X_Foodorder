@@ -1,73 +1,83 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Praesidiarius
- * Date: 13.12.2020
- * Time: 19:45
- */
+<div class="row">
+    <?php
+    /**
+     * Created by PhpStorm.
+     * User: Praesidiarius
+     * Date: 13.12.2020
+     * Time: 19:45
+     */
 
-$this->InlineScript()
-    ->appendFile($this->basePath() . '/foodorder/js/foodlist.js');
+    $this->InlineScript()
+        ->appendFile($this->basePath() . '/foodorder/js/foodlist.js');
 
-$this->InlineScript()
-    ->appendFile($this->basePath() . '/foodorder/js/basket.js');
+    $this->InlineScript()
+        ->appendFile($this->basePath() . '/foodorder/js/basket.js');
 
-?>
-<?php foreach($aMeals as $oMeal) { ?>
-<div class="card mb-4 food-list-item">
-    <div class="card-header">
-        <div class="row">
-            <div class="col-md-11">
-                <h2 class="card-title">
-                    <?=$oMeal->getLabel()?>
-                </h2>
-            </div>
-            <div class="col-md-1 text-right">
-                <i class="fas fa-plus fa-2x text-primary"></i>
-            </div>
-        </div>
-    </div>
-    <div class="card-body">
-        <p class="p-0 m-0"><?=$oMeal->getTextField('description')?></p>
-        <i>Wähle zusätzlich aus: <?php
-            if(count($oMeal->oVariants) > 0) {
-                $iLimit = 5;
-                $iCount = 0;
-                foreach($oMeal->oVariants as $oVar) {
-                    if($iCount == $iLimit) {
-                        break;
-                    }
-                    echo $oVar->label.', ';
-                    $iCount++;
-                }
-            }
-            ?> und mehr</i><br/>
-        <span class="food-price text-primary">CHF <?=number_format($oMeal->getTextField('price_sell'), 2)?></span>
-    </div>
-    <div class="card-footer text-center d-none">
-        <div class="row">
-            <div class="col-md-2">
+    ?>
+    <?php foreach($aMeals as $oMeal) { ?>
+        <div class="col-md-6">
+            <div class="card mb-4 food-list-item">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <b class="card-title" style="font-size:18px;">
+                                <?=$oMeal->getLabel()?>
+                            </b>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            CHF <?=number_format($oMeal->getTextField('price_sell'), 2)?>
+                            <a href="#" class="btn btn-primary btn-xs cart-additem" plc-item-id="<?=$oMeal->getID()?>">
+                                <i class="fas fa-shopping-basket"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="p-0 m-0"><?=$oMeal->getTextField('description')?></p>
+                    <?php if(count($oMeal->oVariants) > 0) { ?>
+                    <i>Wähle zusätzlich aus: <?php
+                        if(count($oMeal->oVariants) > 0) {
+                            $iLimit = 5;
+                            $iCount = 0;
+                            foreach($oMeal->oVariants as $oVar) {
+                                if($iCount == $iLimit) {
+                                    break;
+                                }
+                                echo $oVar->label.', ';
+                                $iCount++;
+                            }
+                        }
+                        ?> und mehr</i><br/>
+                    <?php } ?>
+                </div>
+                <!--
+                <div class="card-footer text-center d-none">
+                    <div class="row">
+                        <div class="col-md-2">
 
-            </div>
-            <div class="col-md-3">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
                         <span class="input-group-text">
                             <i class="fas fa-minus text-light"></i>
                         </span>
-                    </div>
-                    <input type="number" value="1" class="form-control" />
-                    <div class="input-group-append">
+                                </div>
+                                <input type="number" value="1" class="form-control plc-cart-amount" />
+                                <div class="input-group-append">
                         <span class="input-group-text">
                             <i class="fas fa-plus text-primary"></i>
                         </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="#" class="btn btn-primary btn-lg w-100 cart-additem" plc-item-id="<?=$oMeal->getID()?>">CHF <?=number_format($oMeal->getTextField('price_sell'), 2)?></a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <a href="#" class="btn btn-primary btn-lg w-100 cart-additem" plc-item-id="<?=$oMeal->getID()?>">CHF <?=number_format($oMeal->getTextField('price_sell'), 2)?></a>
+                -->
             </div>
         </div>
-    </div>
+    <?php } ?>
 </div>
-<?php } ?>

@@ -8,22 +8,97 @@
 
 use Application\Controller\CoreController;
 
-/*
+
 $this->InlineScript()
-    ->appendFile($this->basePath() . '/foodorder/js/tracking.js'); */
+    ->appendFile($this->basePath() . '/foodorder/js/tracking.js');
 ?>
 
 <div class="container py-4">
+    <!--
     <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-success p-4">
-                Vielen Dank für deine Bestellung. Du kannst den Status deiner Bestellung hier verfolgen
+        <div class="col-md-2">
+            <div class="base-timer">
+                <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <g class="base-timer__circle">
+                        <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45" />
+                        <path
+                                id="base-timer-path-remaining"
+                                stroke-dasharray="283"
+                                class="base-timer__path-remaining ${remainingPathColor}"
+                                d="
+                              M 50, 50
+                              m -45, 0
+                              a 45,45 0 1,0 90,0
+                              a 45,45 0 1,0 -90,0
+                            "
+                        ></path>
+                    </g>
+                </svg>
+                <span id="base-timer-label" class="base-timer__label"></span>
             </div>
         </div>
-    </div>
+    </div> -->
+
+    <section id="cd-timeline" class="cd-container">
+        <div class="cd-timeline-block">
+            <?php if($oOrder->getSelectFieldID('state_idfs') == '15') { ?>
+                <div class="cd-timeline-img cd-wait">
+                    <i class="fas fa-clock text-white"></i>
+                </div> <!-- cd-timeline-img -->
+            <?php } else { ?>
+                <div class="cd-timeline-img cd-done">
+                    <i class="fas fa-check text-white"></i>
+                </div> <!-- cd-timeline-img -->
+            <?php } ?>
+
+            <div class="cd-timeline-content">
+                <h2>Bestätigung des Restaurants</h2>
+                <p>Deine Bestellung muss vom Restaurant bestätigt werden</p>
+                <span class="cd-date">Jan 14 - 14:34 Uhr</span>
+            </div> <!-- cd-timeline-content -->
+        </div> <!-- cd-timeline-block -->
+
+        <div class="cd-timeline-block">
+            <?php if($oOrder->getSelectFieldID('state_idfs') == '17' || $oOrder->getSelectFieldID('state_idfs') == '15') { ?>
+                <div class="cd-timeline-img cd-wait">
+                    <i class="fas fa-clock text-white"></i>
+                </div> <!-- cd-timeline-img -->
+            <?php } else { ?>
+                <div class="cd-timeline-img cd-done">
+                    <i class="fas fa-check text-white"></i>
+                </div> <!-- cd-timeline-img -->
+            <?php } ?>
+            <div class="cd-timeline-content">
+                <h2>Zubereitung deiner Speisen</h2>
+                <p>Deine Speisen werden frisch für dich im Restaurant zubereitet</p>
+                <span class="cd-date">Jan 14 - 14:34 Uhr</span>
+            </div> <!-- cd-timeline-content -->
+        </div> <!-- cd-timeline-block -->
+
+        <div class="cd-timeline-block">
+            <?php if($oOrder->getSelectFieldID('state_idfs') == '27') { ?>
+                <div class="cd-timeline-img cd-done">
+                    <i class="fas fa-check text-white"></i>
+                </div> <!-- cd-timeline-img -->
+            <?php } else { ?>
+                <div class="cd-timeline-img cd-wait">
+                    <i class="fas fa-clock text-white"></i>
+                </div> <!-- cd-timeline-img -->
+            <?php } ?>
+
+            <div class="cd-timeline-content">
+                <h2>Lieferung</h2>
+                <p>Deine Bestellung wird von einem Kurier nach <?=CoreController::$oSession->oLocation->street?> <?=CoreController::$oSession->oLocation->street_nr?>,<?=CoreController::$oSession->oLocation->zip?> <?=CoreController::$oSession->oLocation->city?> geliefert</p>
+                <div id="mapid"></div>
+                <span class="cd-date">Jan 24</span>
+            </div> <!-- cd-timeline-content -->
+        </div> <!-- cd-timeline-block -->
+
+    </section> <!-- cd-timeline -->
+
     <div class="row py-4">
         <div class="col-md-12">
-            <div id="mapid"></div>
+
         </div>
     </div>
 </div>

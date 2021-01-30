@@ -91,7 +91,11 @@ class WebController extends CoreController
         if(count($oMealsDB) > 0) {
             foreach($oMealsDB as $oMeal) {
                 $oMeal->oVariants = $oVariantTbl->select(['article_idfs' => $oMeal->getID()]);
-                $aMeals[] = $oMeal;
+                $iCategoryID = $oMeal->getMultiSelectFieldIDs('category')[0];
+                if(!array_key_exists($iCategoryID,$aMeals)) {
+                    $aMeals[$iCategoryID] = [];
+                }
+                $aMeals[$iCategoryID][] = $oMeal;
             }
         }
         return new ViewModel([
@@ -140,53 +144,66 @@ class WebController extends CoreController
             if(count($oDeliveryTag) > 0) {
                 $oDeliveryTag = $oDeliveryTag->current();
 
-                $aContactData = [
-                    'firstname' => $oRequest->getPost('order_contact_firstname'),
-                    'lastname' => $oRequest->getPost('order_contact_lastname'),
-                    'street' => $oRequest->getPost('order_address_street'),
-                    'street_nr' => $oRequest->getPost('order_address_streetnr'),
-                    'zip' => $oRequest->getPost('order_address_zip'),
-                    'city' => $oRequest->getPost('order_address_city'),
-                ];
+                $iContactID = (int)$oRequest->getPost('contact_idfs');
+                if($iContactID != 0) {
+                    $oAddressFound = $this->aPluginTbls['contact-address']->getSingle($iContactID, 'contact_idfs');
 
-                $oWh = new Where();
-                $oWh->like('zip', $aContactData['zip']);
-                $oWh->like('street', $aContactData['street']);
-                $oWh->like('appartment', $aContactData['street_nr']);
+                    CoreController::$oSession->oLocation->street = $oAddressFound->street;
+                    CoreController::$oSession->oLocation->street_nr = $oAddressFound->appartment;
+                } else {
+                    $aContactData = [
+                        'firstname' => $oRequest->getPost('order_contact_firstname'),
+                        'lastname' => $oRequest->getPost('order_contact_lastname'),
+                        'street' => $oRequest->getPost('order_address_street'),
+                        'email_private' => $oRequest->getPost('order_contact_email'),
+                        'phone_private' => $oRequest->getPost('order_contact_phone'),
+                        'street_nr' => $oRequest->getPost('order_address_streetnr'),
+                        'zip' => $oRequest->getPost('order_address_zip'),
+                        'city' => $oRequest->getPost('order_address_city'),
+                    ];
 
-                $oAddressFound = $this->aPluginTbls['contact-address']->fetchAll(false, $oWh);
-                $oContactFound = false;
-                if(count($oAddressFound) > 0) {
-                    foreach($oAddressFound as $oAddr) {
-                        $oContact = $this->aPluginTbls['contact']->getSingle($oAddr->contact_idfs);
-                        if($oContact->firstname == $aContactData['firstname'] && $oContact->lastname == $aContactData['lastname']) {
-                            $oContactFound = $oContact;
+                    $oAddressFound = $this->aPluginTbls['contact-address']->fetchAll(true, ['street-like' => $aContactData['street'],'zip-like' => $aContactData['zip'],'appartment-like' => $aContactData['street_nr']]);
+                    $oContactFound = false;
+                    if(count($oAddressFound) > 0) {
+                        foreach($oAddressFound as $oAddr) {
+                            var_dump($oAddr);
+                            $oContact = $this->aPluginTbls['contact']->getSingle($oAddr->contact_idfs);
+                            if($oContact->firstname == $aContactData['firstname'] && $oContact->lastname == $aContactData['lastname']) {
+                                $oContactFound = $oContact;
+                                $iContactID = $oContactFound->getID();
+                                $iAddressID = $oAddr->getID();
+                            }
                         }
                     }
-                }
 
-                if($oContactFound) {
+                    if($oContactFound) {
 
-                } else {
-                    $oContactFound = $this->aPluginTbls['contact']->generateNew();
-                    $oContactFound->exchangeArray([
-                        'firstname' => $aContactData['firstname'],
-                        'lastname' => $aContactData['lastname'],
-                    ]);
-                    $iContactID = $this->aPluginTbls['contact']->saveSingle($oContactFound);
-                    $oAddress = $this->aPluginTbls['contact-address']->generateNew();
-                    $oAddress->exchangeArray([
-                        'street' => $aContactData['street'],
-                        'appartment' => $aContactData['street_nr'],
-                        'zip' => $aContactData['zip'],
-                        'city' => $aContactData['city'],
-                        'contact_idfs' => $iContactID,
-                        'created_by' => 1,
-                        'modified_by' => 1,
-                        'created_date' => date('Y-m-d', time()),
-                        'modified_date' => date('Y-m-d', time()),
-                    ]);
-                    $iAddressID = $this->aPluginTbls['contact-address']->saveSingle($oAddress);
+                    } else {
+                        $oContactFound = $this->aPluginTbls['contact']->generateNew();
+                        $oContactFound->exchangeArray([
+                            'firstname' => $aContactData['firstname'],
+                            'lastname' => $aContactData['lastname'],
+                            'email_private' => $aContactData['email_private'],
+                            'phone_private' => $aContactData['phone_private'],
+                        ]);
+                        $iContactID = $this->aPluginTbls['contact']->saveSingle($oContactFound);
+                        $oAddress = $this->aPluginTbls['contact-address']->generateNew();
+                        $oAddress->exchangeArray([
+                            'street' => $aContactData['street'],
+                            'appartment' => $aContactData['street_nr'],
+                            'zip' => $aContactData['zip'],
+                            'city' => $aContactData['city'],
+                            'contact_idfs' => $iContactID,
+                            'created_by' => 1,
+                            'modified_by' => 1,
+                            'created_date' => date('Y-m-d', time()),
+                            'modified_date' => date('Y-m-d', time()),
+                        ]);
+                        $iAddressID = $this->aPluginTbls['contact-address']->saveSingle($oAddress);
+
+                        CoreController::$oSession->oLocation->street = $aContactData['street'];
+                        CoreController::$oSession->oLocation->street_nr = $aContactData['street_nr'];
+                    }
                 }
 
                 $oNewTag = CoreEntityController::$aCoreTables['core-entity-tag']->select([
@@ -202,15 +219,16 @@ class WebController extends CoreController
                 ])->current();
 
                 $aOrderData = [
-                    'contact_idfs' => $oContactFound->getID(),
+                    'contact_idfs' => $iContactID,
                     'type_idfs' => $oOrderTypeTag->Entitytag_ID,
                     'state_idfs' => $oNewTag->Entitytag_ID,
                     'created_by' => 1,
                     'modified_by' => 1,
                     'created_date' => date('Y-m-d', time()),
                     'modified_date' => date('Y-m-d', time()),
+                    'description' => strip_tags(($oRequest->getPost('order_comment')) ? $oRequest->getPost('order_comment') : ''),
                 ];
-                $aOrderData['label'] = 'Onlinebestellung Nr. 1';
+                $aOrderData['label'] = 'Bestellung vom '.date('d.m.Y H:i', time()).' aus '.$aContactData['city'];
                 $aOrderData['deliverymethod_idfs'] = $oDeliveryTag->Entitytag_ID;
 
                 $oNewOrder = $this->aPluginTbls['job']->generateNew();
@@ -238,8 +256,8 @@ class WebController extends CoreController
                 }
 
                 CoreController::$oSession->aCartItems = [];
-                CoreController::$oSession->oLocation->street = $oRequest->getPost('order_address_street');
-                CoreController::$oSession->oLocation->street_nr = $oRequest->getPost('order_address_streetnr');
+
+                unset(CoreController::$oSession->oContact);
 
                 return $this->redirect()->toRoute('food-tracking', ['id' => $iOrderID]);
             } else {
@@ -263,6 +281,41 @@ class WebController extends CoreController
 
         $iOrderID = $this->params()->fromRoute('id', 0);
 
-        return new ViewModel([]);
+        $oOrder = $this->aPluginTbls['job']->getSingle($iOrderID);
+        $oAddressFound = $this->aPluginTbls['contact-address']->getSingle($oOrder->contact_idfs, 'contact_idfs');
+
+        CoreController::$oSession->oLocation->street = $oAddressFound->street;
+        CoreController::$oSession->oLocation->street_nr = $oAddressFound->appartment;
+
+        return new ViewModel([
+            'oOrder' => $oOrder,
+        ]);
+    }
+
+    public function wtdemoAction() {
+        # Set layout
+        $this->layout('layout/json');
+
+        $oWtTbl = new TableGateway('worktime', CoreController::$oDbAdapter);
+
+        $oWtOpen = $oWtTbl->select(['time_end' => '0000-00-00 00:00:00']);
+
+        if(count($oWtOpen) > 0) {
+            $oWtOpen = $oWtOpen->current();
+
+            $oWtTbl->update([
+                'time_end' => date('Y-m-d H:i:s', time()),
+            ],'Worktime_ID = '.$oWtOpen->Worktime_ID);
+
+            echo '<h1>Auf Wiedersehen Nathanael</h1>';
+        } else {
+            $oWtTbl->insert([
+                'time_start' => date('Y-m-d H:i:s', time()),
+            ],'Worktime_ID = '.$oWtOpen->Worktime_ID);
+
+            echo '<h1>Willkommen Nathanael</h1>';
+        }
+
+        return false;
     }
 }

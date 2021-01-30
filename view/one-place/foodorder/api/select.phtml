@@ -1,0 +1,31 @@
+<?php
+?>
+
+
+<div class="row">
+    <!--
+    <div class="col-md-4">
+
+    </div> -->
+    <div class="col-md-12 text-left">
+        <h3><small><?=$oItem->oCat->tag_value?></small><br/><?=$oItem->getLabel()?></h3>
+        <small><?=$oItem->getTextField('description')?></small>
+        <?php if(count($oItem->oVariants) > 0) { ?>
+            <hr/> Extra:
+            <select name="plc-cart-extra">
+                <option value="0">
+                    ohne Extra
+                </option>
+            <?php foreach($oItem->oVariants as $oVar) { ?>
+                <option value="<?=$oVar->id?>">
+                    <?=$oVar->label?>
+                </option>
+            <?php
+            } ?>
+            </select>
+        <?php
+        } ?>
+        <hr/>
+        Stück: <input type="number" id="plc-cart-amount" value="1" />
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 11.01.2021
+ * Time: 19:04
+ */
+
+$this->InlineScript()
+    ->appendFile($this->basePath() . '/foodorder/js/touchscreen.js');
+?>
+
+<div class="currentOrdersFrame"></div>
+<div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+        <span class="sr-only"></span>
+    </div>
+</div>
+

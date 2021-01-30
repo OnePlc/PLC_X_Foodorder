@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="This is a boilerplate for a Bootstrap 4.1.1 project">
+    <meta name="keywords" content="HTML, CSS, JS, Sass, JavaScript, framework, bootstrap, front-end, frontend, web development">
+    <meta name="author" content="Henrik H. Boelsmand">
+    <title>Bootstrap 4 boilerplate</title>
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <!-- build:css -->
+    <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/vendor/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <!-- endbuild -->
+</head>
+
+<body style="overflow-x:hidden;">
+
+<div class="row">
+    <div class="col-md-1  p-4">
+        <a href="/basestation/touchscreen">
+            <i class="fas fa-bell fa-2x"></i>
+        </a>
+        <hr/>
+        <a href="/basestation/cashregister">
+            <i class="fas fa-cash-register fa-2x"></i>
+        </a>
+        <hr/>
+        <a href="#">
+            <i class="fas fa-list fa-2x"></i>
+        </a>
+        <hr/>
+        <a href="#">
+            <i class="fas fa-users fa-2x"></i>
+        </a>
+        <hr/>
+        <a href="/basestation/worktime">
+            <i class="fas fa-user-clock fa-2x"></i>
+        </a>
+        <hr/>
+    </div>
+    <div class="col-md-11 p-4">
+        <?=$this->content?>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<!-- build:js -->
+<?php
+echo $this->inlineScript()
+    ->prependFile($this->basePath('/vendor/select2/dist/js/select2.full.min.js'))
+    ->prependFile($this->basePath('/vendor/bootstrap/dist/js/bootstrap.min.js'))
+    ->prependFile($this->basePath('/vendor/jquery/dist/jquery.min.js'));
+?>
+
+<script src="https://kit.fontawesome.com/0e8b0a2463.js" crossorigin="anonymous"></script>
+<!-- endbuild -->
+</body>
+
+</html>

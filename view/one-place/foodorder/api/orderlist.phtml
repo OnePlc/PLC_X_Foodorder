@@ -1,0 +1,70 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 11.01.2021
+ * Time: 19:23
+ */
+?>
+<div class="card">
+    <div class="card-header">
+        <h2>Neueste Bestellungen</h2>
+        <?php
+        if($bNewOrders) {
+            ?>
+        <script>
+            function play() {
+                var audio = new Audio(
+                    'https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3');
+                audio.play();
+            }
+            play();
+        </script>
+        <?php
+        } ?>
+    </div>
+    <div class="card-body p-0">
+        <ul class="list-group">
+            <?php
+            if(count($aCurrentJobs) > 0) {
+                foreach($aCurrentJobs as $oJob) { ?>
+                    <li class="list-group-item">
+                        <a href="/foodorder/backend/view/<?=$oJob->getID()?>">
+                            <h3><?=$oJob->getLabel()?></h3>
+                        </a>
+                    </li>
+                    <?php
+                }
+            } ?>
+        </ul>
+
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>Bestellungen warten auf Lieferung</h2>
+    </div>
+    <div class="card-body p-0">
+        <ul class="list-group">
+            <?php
+            if(count($aCurrentJobsDelivery) > 0) {
+                foreach($aCurrentJobsDelivery as $oJob) { ?>
+                    <li class="list-group-item">
+                        <a href="/foodorder/backend/view/<?=$oJob->getID()?>">
+                            <h3><?=$oJob->getLabel()?></h3>
+                        </a>
+                    </li>
+                    <?php
+                }
+            } else { ?>
+                <li class="list-group-item">
+                    <div class="alert alert-info p-4">
+                        Alle Bestellungen unterwegs oder ausgeliefert.
+                    </div>
+                </li>
+            <?php } ?>
+        </ul>
+
+    </div>
+</div>

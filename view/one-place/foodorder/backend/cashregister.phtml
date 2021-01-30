@@ -1,0 +1,47 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 11.01.2021
+ * Time: 21:44
+ */
+?>
+<h1>Kasse</h1>
+
+<div class="row text-center">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4 card">
+        <h1>0.00</h1>
+    </div>
+</div>
+<div class="row py-2">
+    <div class="col-md-12 text-center">
+        <a href="#" class="btn btn-primary">Buchen + Drucken</a>
+        <a href="#" class="btn btn-secondary">Buchen</a>
+        <a href="#" class="btn btn-secondary">Reset</a>
+    </div>
+</div>
+<div class="row">
+    <?php
+    foreach($aArticles as $oArt) {
+        $sIcon = 'icon_burger.jpg';
+        if($oArt->getMultiSelectFieldIDs('category')[0] == '19') {
+            $sIcon = 'icon_pommes.jpg';
+        }
+        if($oArt->getMultiSelectFieldIDs('category')[0] == '20') {
+            $sIcon = 'icon_waffel.png';
+        }
+        if($oArt->getMultiSelectFieldIDs('category')[0] == '21') {
+            $sIcon = 'icon_menu.png';
+        }
+        ?>
+    <div class="col-md-1">
+        <div class="card p-1">
+            <img src="/foodorder/img/<?=$sIcon?>" style="max-width:100%;" />
+            <?=$oArt->getLabel()?>
+        </div>
+    </div>
+    <?php } ?>
+</div>

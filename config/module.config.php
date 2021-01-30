@@ -46,6 +46,20 @@ return [
                     ],
                 ],
             ],
+            # Module Basic Route
+            'worktime-demo' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/arbeitszei/resbadge/[:id]',
+                    'constraints' => [
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WebController::class,
+                        'action'     => 'wtdemo',
+                    ],
+                ],
+            ],
             'checkout' => [
                 'type'    => Literal::class,
                 'options' => [
@@ -53,6 +67,36 @@ return [
                     'defaults' => [
                         'controller' => Controller\WebController::class,
                         'action'     => 'checkout',
+                    ],
+                ],
+            ],
+            'touchscreen' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/basestation/touchscreen',
+                    'defaults' => [
+                        'controller' => Controller\BackendController::class,
+                        'action'     => 'touchscreen',
+                    ],
+                ],
+            ],
+            'backend-worktime' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/basestation/worktime',
+                    'defaults' => [
+                        'controller' => Controller\BackendController::class,
+                        'action'     => 'worktime',
+                    ],
+                ],
+            ],
+            'backend-cashregister' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/basestation/cashregister',
+                    'defaults' => [
+                        'controller' => Controller\BackendController::class,
+                        'action'     => 'cashregister',
                     ],
                 ],
             ],
@@ -99,12 +143,27 @@ return [
                     ],
                 ],
             ],
+            'foodorder-backend' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/foodorder/backend[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\BackendController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
 
     'view_manager' => [
         'template_map' => [
             'layout/web'           => __DIR__ . '/../view/layout/web.phtml',
+            'layout/touchscreen'           => __DIR__ . '/../view/layout/touchscreen.phtml',
         ],
         'template_path_stack' => [
             'foodorder' => __DIR__ . '/../view',

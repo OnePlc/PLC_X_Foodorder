@@ -5,23 +5,50 @@
  * Date: 13.12.2020
  * Time: 19:36
  */
-''?>
+''/
 
+$oParentCat = \Application\Controller\CoreController::$aCoreTables['core-entity-tag']->select(['tag_key' => 'shopcategory']);
+$aCategories = [];
+if(count($oParentCat) > 0) {
+    $oParentCat = $oParentCat->current();
+
+    $oCatsDB = \Application\Controller\CoreController::$aCoreTables['core-entity-tag']->select(['parent_tag_idfs' => $oParentCat->Entitytag_ID]);
+    if(count($oCatsDB) > 0) {
+        foreach($oCatsDB as $oCatDB) {
+            $aCategories[] = (object)['id' => $oCatDB->Entitytag_ID, 'label' => $oCatDB->tag_value, 'href' => $oCatDB->tag_key];
+        }
+    }
+}
+
+?>
+
+<!--
 <div class="row w-100 py-4" style="background:url(/foodorder/img/landingpage.jpg) no-repeat; background-size:cover; height:250px;">
-</div>
+</div> -->
 
-<?=$this->partial('shop/partials/category_filter', [])?>
+<?=$this->partial('shop/partials/category_filter', ['aCategories' => $aCategories])?>
 
 <div class="row">
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <?=$this->partial('shop/partials/food_list', ['aMeals' => $aMeals])?>
+                <?php
+                if(count($aCategories) > 0) {
+                    foreach($aCategories as $oCat) { ?>
+                        <!--
+                        <div class="row" id="<?=$oCat->href?>" style="background:url(/foodorder/img/<?=$oCat->href?>.png) no-repeat; background-size:cover; height:150px"></div>
+                        -->
+                        <div id="<?=$oCat->href?>" class="anchor"></div>
+                        <div class="row bg-dark p-3"><h3 class="text-white"><?=$oCat->label?></h3></div>
+                        <?=$this->partial('shop/partials/food_list', ['aMeals' => $aMeals[''.$oCat->id.'']])?>
+                <?php
+                    }
+                } ?>
             </div>
             <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Warenkorb</h2>
+                <div class="card" id="plc-shop-cart">
+                    <div class="card-header p-3 py-0 bg-dark">
+                        <h3 class="text-white"><i class="fas fa-shopping-basket"></i> Warenkorb</h3>
                     </div>
                     <div class="ajax-cart">
                         <div class="card-body  m-0 p-0 border-0">

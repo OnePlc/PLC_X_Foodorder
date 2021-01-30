@@ -1,0 +1,26 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Praesidiarius
+ * Date: 11.01.2021
+ * Time: 19:04
+ */
+
+$this->InlineScript()
+    ->appendFile($this->basePath() . '/foodorder/js/touchscreen.js');
+?>
+
+<h1>Mitarbeiter Arbeitszeiten</h1>
+
+<ul class="list-group">
+    <?php
+    if(count($aCurrentTimes) > 0) {
+        foreach($aCurrentTimes as $oTime) { ?>
+            <li class="list-group">
+                Nathanael Kammermann - <?=date('d.m.Y H:i',strtotime($oTime->time_start))?> - <?=date('H:i',strtotime($oTime->time_end))?>
+            </li>
+    <?php
+        }
+    } ?>
+
+</ul>

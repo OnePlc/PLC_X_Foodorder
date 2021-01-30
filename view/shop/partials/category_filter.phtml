@@ -6,26 +6,28 @@
  * Time: 19:45
  */
 ?>
-<div class="bg-light row">
+<div class="bg-light row" id="plc-category-filter">
     <div class="container py-2">
         <div class="row">
-            <div class="col-md-1">
-                <i class="fas fa-search text-dark"></i>
+            <div class="col-md-1 d-none" id="plc-category-logo">
+                <a href="#top"><img src="/foodorder/img/logo.png" style="max-height:64px;"/></a>
             </div>
-            <div class="col-md-10">
+            <div class="col-md-11 plc-cat-filer-nav" style="font-weight:bold;">
                 <ul class="list-inline">
+                    <!--
                     <li class="list-inline-item">
                         Beliebtes
-                    </li>
-                    <li class="list-inline-item">
-                        Burger
-                    </li>
-                    <li class="list-inline-item">
-                        Waffeln
-                    </li>
-                    <li class="list-inline-item">
-                        Salate
-                    </li>
+                    </li> -->
+                    <?php
+                    if(count($aCategories) > 0) {
+                        foreach($aCategories as $oCat) { ?>
+                            <li class="list-inline-item">
+                                <a href="#<?=$oCat->href?>"><?=$oCat->label?></a>
+                            </li>
+                    <?php
+                        }
+                    }
+                    ?>
                 </ul>
             </div>
         </div>
