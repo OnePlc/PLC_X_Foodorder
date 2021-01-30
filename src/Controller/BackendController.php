@@ -62,9 +62,9 @@ class BackendController extends CoreController
     public function indexAction()
     {
         # Set layout
-        $this->layout('layout/json');
+        $this->setThemeBasedLayout('foodorder');
 
-        return false;
+        return [];
     }
 
     /**
